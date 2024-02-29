@@ -10,6 +10,16 @@ main {
 
 }
 
+h1{
+    font-size: 1.8rem;
+    padding: 1rem 0;
+}
+
+h2{
+    font-size: 1.4rem;
+    padding: 0.5rem 0;
+}
+
 h3.card-title{
     font-size: 20px;
 }
@@ -25,3 +35,15 @@ h3.card-text{
 .rating span {
     margin: 0.1 rem !important;
 }
+
+.list-group-item{
+    a{
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+
