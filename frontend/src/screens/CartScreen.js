@@ -30,7 +30,8 @@ function CartScreen() {
     }
 
     const checkoutHandler = () =>{
-        history('/login?redirect=shipping')
+        history('/login?redirect=/shipping')
+        // history('/shipping')
     }
 
 
