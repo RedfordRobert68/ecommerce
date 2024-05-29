@@ -4,13 +4,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
-from base.models import Product
+from base.models import Product, Order, OrderItem, ShippingAddress
 from base.serializers import ProductSerializer, OrderSerializer
 
 from rest_framework import status
 
 @api_view(['POST'])
-@permission_classes(['isAuthenticate'])
+@permission_classes([IsAuthenticated])
 
 def addOrderItems(request):
     user = request.user
@@ -55,11 +55,11 @@ def addOrderItems(request):
                 image=product.image.url,
             )
 
-        #(4) Update stock
+            #(4) Update stock
 
-        product.countInStock -= item.qty
-        product.save()
+            product.countInStock -= item.qty
+            product.save()
 
-    serializer = OrderSerializer(order, many=False)
+        serializer = OrderSerializer(order, many=False)
 
-    return Response(serializer.data)
+        return Response(serializer.data)
