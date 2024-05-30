@@ -1,4 +1,5 @@
-import { configureStore, combineReducers} from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
+// import { thunk } from 'redux-thunk'
 import { productListReducer, productDetailsReducer } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers'
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer } from './reducers/userReducers'
@@ -32,6 +33,7 @@ export const initialState = {
     userLogin: {userInfo: userInfoFromStorage}
 }
 
+// const middleware = { thunk }
 
 const store = configureStore({
     reducer: reducer, 

@@ -5,22 +5,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from '../actions/orderActions'
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 
 function PlaceOrderScreen() {
         
-    const history = useNavigate()
-
     const orderCreate = useSelector(state => state.orderCreate)
-    const {order, error, success} = orderCreate
+    const { order, error, success } = orderCreate
 
     const dispatch = useDispatch()
+    const history = useNavigate()
+
     const cart = useSelector(state => state.cart)
 
-    cart.itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
-    cart.shippingPrice = (cart.itemsPrice > 100 ? 0 : 10).toFixed(2)
-    cart.taxPrice = Number((0.06) * cart.itemsPrice).toFixed(2)
+    const itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
+    const shippingPrice = (itemsPrice > 100 ? 0 : 10).toFixed(2)
+    const taxPrice = Number((0.06) * itemsPrice).toFixed(2)
 
-    cart.totalPrice = (Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice)).toFixed(2)
+    const totalPrice = (Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice)).toFixed(2)
 
     if(!cart.paymentMethod){
         history('/payment')
@@ -29,6 +30,7 @@ function PlaceOrderScreen() {
     useEffect(() => {
         if(success){
             history(`/order/${order._id}`)
+            dispatch({ type: ORDER_CREATE_RESET })
         }
     })//,[success, history]
 
@@ -37,10 +39,10 @@ function PlaceOrderScreen() {
             orderItems: cart.cartItems,
             shippingAddress: cart.shippingAddress,
             paymentMethod: cart.paymentMethod,
-            itemsPrice: cart.itemsPrice,
-            shippingPrice: cart.shippingPrice,
-            taxPrice: cart.taxPrice,
-            totalPrice: cart.totalPrice,
+            itemsPrice: itemsPrice,
+            shippingPrice: shippingPrice,
+            taxPrice: taxPrice,
+            totalPrice: totalPrice,
         }))
     }
 
@@ -60,6 +62,7 @@ function PlaceOrderScreen() {
                                     Shipping:&nbsp;
                                 </strong>
                                 {cart.shippingAddress.address},
+                                {'  '}
                                 {cart.shippingAddress.city},
                                 {'  '}
                                 {cart.shippingAddress.postalCode},
@@ -130,7 +133,7 @@ function PlaceOrderScreen() {
                                         </h2>
                                     </Col>
                                     <Col>
-                                        ${cart.itemsPrice}
+                                        ${itemsPrice}
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
@@ -143,7 +146,7 @@ function PlaceOrderScreen() {
                                         </h2>
                                     </Col>
                                     <Col>
-                                        ${cart.shippingPrice}
+                                        ${shippingPrice}
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
@@ -156,7 +159,7 @@ function PlaceOrderScreen() {
                                         </h2>
                                     </Col>
                                     <Col>
-                                        ${cart.taxPrice}
+                                        ${taxPrice}
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
@@ -169,7 +172,7 @@ function PlaceOrderScreen() {
                                         </h2>
                                     </Col>
                                     <Col>
-                                        ${cart.totalPrice}
+                                        ${totalPrice}
                                     </Col>
                                 </Row>
                             </ListGroup.Item>
