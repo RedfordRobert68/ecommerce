@@ -1,25 +1,25 @@
 import React, { useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { getOrderDetails } from '../actions/orderActions'
 
-function OrderScreen({ match }) {
-    const params = useParams()
-    const orderId = params.id
+function OrderScreen() {
+    // const params = useParams()
+    const { id } = useParams()
+    const orderId = id
     const dispatch = useDispatch()
         
     const orderDetails = useSelector(state => state.orderDetails)
     const { order, error, loading } = orderDetails
 
+    // const itemsPrice = order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
+
     if(!loading && !error){
         order.itemsPrice = order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
     }
-    
-    // const itemsPrice = cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0).toFixed(2)
-
 
     useEffect(() => {
         if(!order || order._id !== Number(orderId)){   
@@ -113,7 +113,7 @@ function OrderScreen({ match }) {
                                                     <Image src={item.image} alt={item.name} fluid rounded />
                                                 </Col>
                                                 <Col>
-                                                    <Link to={`/product/$item.product`}>
+                                                    <Link to={`/product/${item.product}`}>
                                                         {item.name}
                                                     </Link>
                                                 </Col>
